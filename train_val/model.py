@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch.nn.functional as F
 import sys
-sys.path.append("segment-anything-training")
+sys.path.append("..")
 from segment_anything import sam_model_registry
 from segment_anything import SamPredictor
 import torch
@@ -14,7 +14,7 @@ class Model(nn.Module):
         self.cfg = cfg
 
     def setup(self):
-        self.model = sam_model_registry["vit_t"](checkpoint=self.cfg.model.checkpoint)
+        self.model = sam_model_registry[self.cfg.model.type](checkpoint=self.cfg.model.checkpoint)
         self.model=self.model.to(device)
         self.model.train()
         if self.cfg.model.freeze.image_encoder:
