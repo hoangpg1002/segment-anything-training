@@ -13,7 +13,8 @@ class Model(nn.Module):
         self.cfg = cfg
 
     def setup(self):
-        self.model = sam_model_registry[self.cfg.model.type](checkpoint=self.cfg.model.checkpoint)
+        model_type="vit_t"
+        self.model = sam_model_registry[model_type](checkpoint=self.cfg.model.checkpoint)
         self.model=self.model.to(device)
         self.model.train()
         if self.cfg.model.freeze.image_encoder:
