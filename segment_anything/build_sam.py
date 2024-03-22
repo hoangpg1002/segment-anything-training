@@ -95,7 +95,7 @@ sam_model_registry = {
     "vit_h": build_sam_vit_h,
     "vit_l": build_sam_vit_l,
     "vit_b": build_sam_vit_b,
-    "vit_t": build_sam_vit_t,
+    "vit_tiny": build_sam_vit_t,
 
 }
 

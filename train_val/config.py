@@ -15,7 +15,7 @@ config = {
         "warmup_steps": 250,
     },
     "model": {
-        "type": "vit_t",
+        "type": "vit_tiny",
         "checkpoint": "/kaggle/working/segment-anything-training/pretrained_weights/tinysam.pth",
         "freeze": {
             "image_encoder": True,

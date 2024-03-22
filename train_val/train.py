@@ -1,6 +1,5 @@
 import os
 import sys
-sys.path.append("D:\StableDiffusion\segment-anything")
 import time
 import segmentation_models_pytorch as smp
 import torch
