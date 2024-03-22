@@ -13,7 +13,7 @@ class Model(nn.Module):
         self.cfg = cfg
 
     def setup(self):
-        model_type="vit_t"
+        model_type='vit_t'
         self.model = sam_model_registry[model_type](checkpoint=self.cfg.model.checkpoint)
         self.model=self.model.to(device)
         self.model.train()
