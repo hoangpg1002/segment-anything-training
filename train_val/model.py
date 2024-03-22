@@ -1,5 +1,7 @@
 import torch.nn as nn
 import torch.nn.functional as F
+import sys
+sys.path.append("segment-anything-training")
 from segment_anything import sam_model_registry
 from segment_anything import SamPredictor
 import torch
