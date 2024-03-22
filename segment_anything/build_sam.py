@@ -89,7 +89,7 @@ def build_sam_vit_b(checkpoint=None):
         checkpoint=checkpoint,
     )
 
-
+build_sam = build_sam_vit_t
 sam_model_registry = {
     "default": build_sam_vit_h,
     "vit_h": build_sam_vit_h,
