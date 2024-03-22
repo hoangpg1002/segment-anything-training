@@ -16,7 +16,7 @@ config = {
     },
     "model": {
         "type": "vit_b",
-        "checkpoint": "pretrained_weights/tinysam.pth",
+        "checkpoint": "/kaggle/working/segment-anything-training/pretrained_weights/tinysam.pth",
         "freeze": {
             "image_encoder": True,
             "prompt_encoder": True,
