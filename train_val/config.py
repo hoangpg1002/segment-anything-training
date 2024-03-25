@@ -33,7 +33,7 @@ config = {
     #         "annotation_file": "coco2017/annotations/instances_val2017.json"
     #     }
     # },
-    "samdataset":"sa1b"
+    "samdataset":"/kaggle/working/segment-anything-training/sa1b"
 }
 
 cfg = Box(config)
