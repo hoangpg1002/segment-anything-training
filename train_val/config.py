@@ -16,7 +16,7 @@ config = {
     },
     "model": {
         "type":"vit_b",
-        "checkpoint": "pretrained_weights/sam_vit_b_01ec64.pth",
+        "checkpoint": "/kaggle/working/segment-anything-training/pretrained_weights/sam_vit_b_01ec64.pth",
         "freeze": {
             "image_encoder": True,
             "prompt_encoder": True,
