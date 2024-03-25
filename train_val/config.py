@@ -23,16 +23,16 @@ config = {
             "mask_decoder": False,
         },
     },
-    "dataset": {
-        "train": {
-            "root_dir": "coco2017/train2017",
-            "annotation_file": "coco2017/annotations/instances_minitrain2017.json"
-        },
-        "val": {
-            "root_dir": "coco2017/val2017",
-            "annotation_file": "coco2017/annotations/instances_val2017.json"
-        }
-    },
+    # "dataset": {
+    #     "train": {
+    #         "root_dir": "coco2017/train2017",
+    #         "annotation_file": "coco2017/annotations/instances_minitrain2017.json"
+    #     },
+    #     "val": {
+    #         "root_dir": "coco2017/val2017",
+    #         "annotation_file": "coco2017/annotations/instances_val2017.json"
+    #     }
+    # },
     "samdataset":"sa1b"
 }
 
