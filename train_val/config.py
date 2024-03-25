@@ -16,7 +16,7 @@ config = {
     },
     "model": {
         "type":"vit_b",
-        "checkpoint": "/kaggle/working/segment-anything-training/pretrained_weights/sam_vit_b_01ec64.pth",
+        "checkpoint": "pretrained_weights/sam_vit_b_01ec64.pth",
         "freeze": {
             "image_encoder": True,
             "prompt_encoder": True,
@@ -33,7 +33,7 @@ config = {
     #         "annotation_file": "coco2017/annotations/instances_val2017.json"
     #     }
     # },
-    "samdataset":"/kaggle/input/sa1b01/sa1b"
+    "samdataset":"sa1b"
 }
 
 cfg = Box(config)

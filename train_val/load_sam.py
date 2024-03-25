@@ -12,47 +12,51 @@ import cv2
 from transforms import ResizeLongestSide
 import matplotlib.pyplot as plt
 from torch.utils.data import random_split
+from config import cfg
 class SA1BDataset(Dataset):
     def __init__(self, dataset_dir, annotation_dir='annotations', image_dir='images', min_object=0, transform=None):
         super().__init__()
-        ids = [file.replace(".json",'') for file in os.listdir(os.path.join(dataset_dir, annotation_dir))]
+        self.dataset_dir = dataset_dir
+        self.annotation_dir = annotation_dir
+        self.image_dir = image_dir
         self.min_object = min_object
         self.transform = transform
-        self.samples = [self.load_sample(dataset_dir, id, annotation_dir, image_dir) for id in ids] 
-        self.image_info = [json.load(open(annotation_path)) for _, annotation_path in self.samples]
-    
+        self.samples = [file.replace(".json",'') for file in os.listdir(os.path.join(dataset_dir, annotation_dir))]
+
     def __len__(self):
         return len(self.samples)
-    
+
     def __getitem__(self, index):
-        image = cv2.imread(self.samples[index][0])
+        id = self.samples[index]
+        image_path = os.path.join(self.dataset_dir, self.image_dir, id + ".jpg")
+        annotation_path = os.path.join(self.dataset_dir, self.annotation_dir, id + ".json")
+
+        with open(annotation_path, 'r') as f:
+            annotation = json.load(f)
+
+        image = cv2.imread(image_path)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        bboxes, masks = self.load_bboxes_mask(index)
+
+        if "annotations" in annotation:
+            bboxes, masks = self.load_bboxes_mask(annotation["annotations"])
+        else:
+            bboxes, masks = [], []
+
         if self.transform:
             image, masks, bboxes = self.transform(image, masks, np.array(bboxes))
 
         bboxes = np.stack(bboxes, axis=0)
         masks = np.stack(masks, axis=0)
         return image, torch.tensor(bboxes), torch.tensor(masks).float()
-    
-    def load_bboxes_mask(self, idx):
-        image_info = self.image_info[idx]
+
+    def load_bboxes_mask(self, annotations):
         masks = []
         bboxes = []
-        annotations = image_info.get("annotations", [])
         for annotation in annotations:
             masks.append(mask_utils.decode(annotation['segmentation'])) 
             x, y, w, h = annotation['bbox']
             bboxes.append([x, y, x + w, y + h])
-        bboxes = np.array(bboxes)
-        masks = np.array(masks)
         return bboxes, masks
-    
-    @staticmethod
-    def load_sample(root, id, annotation_dir='annotations', image_dir='images'):
-        img = os.path.join(root, image_dir, id+".jpg") 
-        annotation = os.path.join(root, annotation_dir, id+".json") 
-        return img, annotation
     
 class ResizeAndPad:
 
@@ -108,6 +112,8 @@ def load_datasets(cfg, img_size):
                                 collate_fn=collate_fn)
     return train_dataloader, val_dataloader
 
+# train_dataloader,_=load_datasets(cfg=cfg,img_size=1024)
+
 # def show_box(box, ax):
 #     x0, y0 = box[0], box[1]
 #     w, h = box[2] - box[0], box[3] - box[1]
@@ -130,12 +136,13 @@ def load_datasets(cfg, img_size):
 #             show_box(box, plt.gca())
 #         plt.axis('off')
 #         plt.show()
-# for images, bboxes, masks in data_loader:
-#     image = images[0].permute(1, 2, 0).numpy()  
-#     bboxes = bboxes[0].numpy()
-#     masks = masks[0]
-#     show_res(masks,bboxes,image)
-#     break 
+# if __name__ == '__main__':
+#     for images, bboxes, masks in train_dataloader:
+#         image = images[0].permute(1, 2, 0).numpy()  
+#         bboxes = bboxes[0].numpy()
+#         masks = masks[0].numpy()
+#         show_res(masks,bboxes,image)
+#         break 
 
 
 
