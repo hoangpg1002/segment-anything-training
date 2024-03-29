@@ -105,9 +105,9 @@ def train_sam(
 
             num_masks = sum(len(pred_mask) for pred_mask in pred_masks)
 
-            loss_focal = torch.tensor(0., device=device, requires_grad=True)
-            loss_dice = torch.tensor(0., device=device, requires_grad=True)
-            loss_iou = torch.tensor(0., device=device, requires_grad=True)
+            loss_focal = torch.tensor(0., device=device)
+            loss_dice = torch.tensor(0., device=device)
+            loss_iou = torch.tensor(0., device=device)
             # loss_test = torch.tensor(0., device=device, requires_grad=True)
 
             for pred_mask, gt_mask, iou_prediction in zip(pred_masks, gt_masks, iou_predictions):
