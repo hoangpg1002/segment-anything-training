@@ -132,14 +132,16 @@ def train_sam(
             total_losses.update(loss_total.item(), batch_size)
 
             # Print progress
-            print(f'Epoch: [{epoch}][{iter+1}/{len(train_dataloader)}]'
-                  f' | Time [{batch_time.val:.3f}s ({batch_time.avg:.3f}s)]'
-                  f' | Data [{data_time.val:.3f}s ({data_time.avg:.3f}s)]'
-                  f' | Focal Loss [{focal_losses.val:.4f} ({focal_losses.avg:.4f})]'
-                  f' | Dice Loss [{dice_losses.val:.4f} ({dice_losses.avg:.4f})]'
-                  f' | IoU Loss [{iou_losses.val:.4f} ({iou_losses.avg:.4f})]'
-                #   f' | Test Loss [{test_losses.val:.4f} ({test_losses.avg:.4f})]'
-                  f' | Total Loss [{total_losses.val:.4f} ({total_losses.avg:.4f})]')
+            if (iter %10==0):
+                print(batch_iou)
+                print(f'Epoch: [{epoch}][{iter+1}/{len(train_dataloader)}]'
+                    f' | Time [{batch_time.val:.3f}s ({batch_time.avg:.3f}s)]'
+                    f' | Data [{data_time.val:.3f}s ({data_time.avg:.3f}s)]'
+                    f' | Focal Loss [{focal_losses.val:.4f} ({focal_losses.avg:.4f})]'
+                    f' | Dice Loss [{dice_losses.val:.4f} ({dice_losses.avg:.4f})]'
+                    f' | IoU Loss [{iou_losses.val:.4f} ({iou_losses.avg:.4f})]'
+                    # f' | Focal Loss [{focal_losses.val:.4f} ({focal_losses.avg:.4f})]'
+                    f' | Total Loss [{total_losses.val:.4f} ({total_losses.avg:.4f})]')
             torch.cuda.empty_cache()
 
             
