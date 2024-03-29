@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.append(os.getcwd())
+# sys.path.append(os.getcwd())
 import cv2
 import numpy as np
 import torch

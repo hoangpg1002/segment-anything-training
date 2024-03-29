@@ -15,7 +15,6 @@ from torch.utils.data import DataLoader
 from utils import AverageMeter
 from utils import calc_iou
 import warnings
-sys.path.append(os.getcwd())
 warnings.filterwarnings("ignore")
 torch.set_float32_matmul_precision('high')
 device="cuda" if torch.cuda.is_available() else "cpu"
