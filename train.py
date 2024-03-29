@@ -69,14 +69,14 @@ def train_sam(
 
     focal_loss = FocalLoss()
     dice_loss = DiceLoss()
-    test_loss = FocalTverskyLoss()
+    # test_loss = FocalTverskyLoss()
 
     for epoch in range(1, cfg.num_epochs):
         batch_time = AverageMeter()
         data_time = AverageMeter()
         focal_losses = AverageMeter()
         dice_losses = AverageMeter()
-        test_losses = AverageMeter()
+        # test_losses = AverageMeter()
         iou_losses = AverageMeter()
         total_losses = AverageMeter()
         end = time.time()
@@ -105,31 +105,31 @@ def train_sam(
 
             num_masks = sum(len(pred_mask) for pred_mask in pred_masks)
 
-            loss_focal = 0.
-            loss_dice = 0.
-            loss_iou = 0.
-            loss_test = 0.
+            loss_focal = torch.tensor(0., device=device, requires_grad=True)
+            loss_dice = torch.tensor(0., device=device, requires_grad=True)
+            loss_iou = torch.tensor(0., device=device, requires_grad=True)
+            # loss_test = torch.tensor(0., device=device, requires_grad=True)
 
             for pred_mask, gt_mask, iou_prediction in zip(pred_masks, gt_masks, iou_predictions):
                 batch_iou = calc_iou(pred_mask, gt_mask)
-                loss_focal += focal_loss(pred_mask, gt_mask, num_masks).item()  # Summing directly into the variable
-                loss_dice += dice_loss(pred_mask, gt_mask, num_masks).item()
-                loss_iou += F.mse_loss(iou_prediction, batch_iou, reduction='sum').item() / num_masks
-                loss_test += test_loss(pred_mask, gt_mask, num_masks).item()
+                loss_focal += focal_loss(pred_mask, gt_mask, num_masks)
+                loss_dice += dice_loss(pred_mask, gt_mask, num_masks)
+                loss_iou += F.mse_loss(iou_prediction, batch_iou, reduction='sum') / num_masks
+                # loss_test += test_loss(pred_mask, gt_mask, num_masks)
 
             loss_total = 20. * loss_focal + loss_dice + loss_iou
             loss_total.backward()
             optimizer.step()
             scheduler.step()
-
+            del images, bboxes, gt_masks, pred_masks, iou_predictions
             batch_time.update(time.time() - end)
             end = time.time()
 
             # Update loss meters
-            focal_losses.update(loss_focal, batch_size)
-            dice_losses.update(loss_dice, batch_size)
-            iou_losses.update(loss_iou, batch_size)
-            test_losses.update(loss_test, batch_size)
+            focal_losses.update(loss_focal.item(), batch_size)
+            dice_losses.update(loss_dice.item(), batch_size)
+            iou_losses.update(loss_iou.item(), batch_size)
+            # test_losses.update(loss_test.item(), batch_size)
             total_losses.update(loss_total.item(), batch_size)
 
             # Print progress
@@ -139,8 +139,9 @@ def train_sam(
                   f' | Focal Loss [{focal_losses.val:.4f} ({focal_losses.avg:.4f})]'
                   f' | Dice Loss [{dice_losses.val:.4f} ({dice_losses.avg:.4f})]'
                   f' | IoU Loss [{iou_losses.val:.4f} ({iou_losses.avg:.4f})]'
-                  f' | Test Loss [{test_losses.val:.4f} ({test_losses.avg:.4f})]'
+                #   f' | Test Loss [{test_losses.val:.4f} ({test_losses.avg:.4f})]'
                   f' | Total Loss [{total_losses.val:.4f} ({total_losses.avg:.4f})]')
+            torch.cuda.empty_cache()
 
             
 
