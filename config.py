@@ -2,7 +2,7 @@ from box import Box
 
 config = {
     "num_devices": 1,
-    "batch_size": 1,
+    "batch_size": 32,
     "num_workers": 4,
     "num_epochs": 20,
     "eval_interval": 2,
@@ -26,7 +26,7 @@ config = {
     "dataset": {
         "train": {
             "root_dir": "/kaggle/input/coco-2017-dataset/coco2017/train2017",
-            "annotation_file": "/kaggle/input/coco-2017-dataset/coco2017/annotations/instances_train2017.json"
+            "annotation_file": "/kaggle/input/coco-2017-dataset/coco2017/annotations/instances_minitrain2017.json"
         },
         "val": {
             "root_dir": "/kaggle/input/coco-2017-dataset/coco2017/val2017",
