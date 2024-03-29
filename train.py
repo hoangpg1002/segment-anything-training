@@ -69,7 +69,8 @@ def train_sam(
 
     focal_loss = FocalLoss()
     dice_loss = DiceLoss()
-    test_loss=FocalTverskyLoss()
+    test_loss = FocalTverskyLoss()
+
     for epoch in range(1, cfg.num_epochs):
         batch_time = AverageMeter()
         data_time = AverageMeter()
@@ -88,48 +89,60 @@ def train_sam(
 
             data_time.update(time.time() - end)
             images, bboxes, gt_masks = data
+
             # Move tensors to device
             images = images.to(device)
             bboxes = [bbox.to(device) for bbox in bboxes]
             gt_masks = [mask.to(device) for mask in gt_masks]
 
             batch_size = images.size(0)
+
+            optimizer.zero_grad()
+
             pred_masks, iou_predictions = model(images, bboxes)
             pred_masks = [mask.to(device) for mask in pred_masks]
             iou_predictions = [iou_pred.to(device) for iou_pred in iou_predictions]
+
             num_masks = sum(len(pred_mask) for pred_mask in pred_masks)
-            loss_focal = torch.tensor(0., device=device)
-            loss_dice = torch.tensor(0., device=device)
-            loss_iou = torch.tensor(0., device=device)
-            loss_test=torch.tensor(0.,device=device)
+
+            loss_focal = 0.
+            loss_dice = 0.
+            loss_iou = 0.
+            loss_test = 0.
+
             for pred_mask, gt_mask, iou_prediction in zip(pred_masks, gt_masks, iou_predictions):
                 batch_iou = calc_iou(pred_mask, gt_mask)
-                loss_focal += focal_loss(pred_mask, gt_mask,num_masks)
-                loss_dice += dice_loss(pred_mask, gt_mask,num_masks)
-                loss_iou += F.mse_loss(iou_prediction, batch_iou, reduction='sum') / num_masks
-                loss_test+=test_loss(pred_mask,gt_mask,num_masks)
+                loss_focal += focal_loss(pred_mask, gt_mask, num_masks).item()  # Summing directly into the variable
+                loss_dice += dice_loss(pred_mask, gt_mask, num_masks).item()
+                loss_iou += F.mse_loss(iou_prediction, batch_iou, reduction='sum').item() / num_masks
+                loss_test += test_loss(pred_mask, gt_mask, num_masks).item()
 
             loss_total = 20. * loss_focal + loss_dice + loss_iou
-            optimizer.zero_grad()
             loss_total.backward()
             optimizer.step()
             scheduler.step()
+
             batch_time.update(time.time() - end)
             end = time.time()
 
-            #test_losses.update(loss_test.item(), batch_size)
-            focal_losses.update(loss_focal.item(), batch_size)
-            dice_losses.update(loss_dice.item(), batch_size)
-            iou_losses.update(loss_iou.item(), batch_size)
+            # Update loss meters
+            focal_losses.update(loss_focal, batch_size)
+            dice_losses.update(loss_dice, batch_size)
+            iou_losses.update(loss_iou, batch_size)
+            test_losses.update(loss_test, batch_size)
             total_losses.update(loss_total.item(), batch_size)
 
+            # Print progress
             print(f'Epoch: [{epoch}][{iter+1}/{len(train_dataloader)}]'
-                         f' | Time [{batch_time.val:.3f}s ({batch_time.avg:.3f}s)]'
-                         f' | Data [{data_time.val:.3f}s ({data_time.avg:.3f}s)]'
-                         f' | Focal Loss [{focal_losses.val:.4f} ({focal_losses.avg:.4f})]'
-                         f' | Dice Loss [{dice_losses.val:.4f} ({dice_losses.avg:.4f})]'
-                         f' | IoU Loss [{iou_losses.val:.4f} ({iou_losses.avg:.4f})]'
-                         f' | Total Loss [{total_losses.val:.4f} ({total_losses.avg:.4f})]')
+                  f' | Time [{batch_time.val:.3f}s ({batch_time.avg:.3f}s)]'
+                  f' | Data [{data_time.val:.3f}s ({data_time.avg:.3f}s)]'
+                  f' | Focal Loss [{focal_losses.val:.4f} ({focal_losses.avg:.4f})]'
+                  f' | Dice Loss [{dice_losses.val:.4f} ({dice_losses.avg:.4f})]'
+                  f' | IoU Loss [{iou_losses.val:.4f} ({iou_losses.avg:.4f})]'
+                  f' | Test Loss [{test_losses.val:.4f} ({test_losses.avg:.4f})]'
+                  f' | Total Loss [{total_losses.val:.4f} ({total_losses.avg:.4f})]')
+
+            
 
 
 def configure_opt(cfg: Box, model: Model):
