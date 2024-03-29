@@ -2,7 +2,7 @@ from box import Box
 
 config = {
     "num_devices": 1,
-    "batch_size": 4,
+    "batch_size": 2,
     "num_workers": 4,
     "num_epochs": 20,
     "eval_interval": 2,
@@ -15,8 +15,8 @@ config = {
         "warmup_steps": 250,
     },
     "model": {
-        "type":"vit_t",
-        "checkpoint": "/kaggle/working/segment-anything-training/pretrained_weights/tinysam.pth",
+        "type":"vit_b",
+        "checkpoint": "/kaggle/working/segment-anything-training/pretrained_weights/sam_vit_b_01ec64.pth",
         "freeze": {
             "image_encoder": True,
             "prompt_encoder": True,

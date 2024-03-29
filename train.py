@@ -132,7 +132,7 @@ def train_sam(
             total_losses.update(loss_total.item(), batch_size)
 
             # Print progress
-            if (iter %10==0):
+            if (iter %50==0):
                 print(batch_iou)
                 print(f'Epoch: [{epoch}][{iter+1}/{len(train_dataloader)}]'
                     f' | Time [{batch_time.val:.3f}s ({batch_time.avg:.3f}s)]'
