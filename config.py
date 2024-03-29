@@ -26,7 +26,7 @@ config = {
     "dataset": {
         "train": {
             "root_dir": "/kaggle/input/coco-2017-dataset/coco2017/train2017",
-            "annotation_file": "/kaggle/input/coco-2017-dataset/coco2017/annotations/instances_minitrain2017.json"
+            "annotation_file": "/kaggle/working/instances_minitrain2017.json"
         },
         "val": {
             "root_dir": "/kaggle/input/coco-2017-dataset/coco2017/val2017",
