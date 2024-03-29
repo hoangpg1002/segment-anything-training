@@ -15,6 +15,7 @@ from torch.utils.data import DataLoader
 from utils import AverageMeter
 from utils import calc_iou
 import warnings
+sys.path.append("/kaggle/working/segment-anything-training/segment-anything-training")
 warnings.filterwarnings("ignore")
 torch.set_float32_matmul_precision('high')
 device="cuda" if torch.cuda.is_available() else "cpu"
@@ -151,8 +152,6 @@ def configure_opt(cfg: Box, model: Model):
 
 
 def main(cfg: Box) -> None:
-    import sys
-    sys.path.append("/kaggle/working/segment-anything-training/segment-anything-training")
     os.makedirs(cfg.out_dir, exist_ok=True)
 
     # Initialize model
