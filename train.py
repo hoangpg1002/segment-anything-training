@@ -155,13 +155,12 @@ def main(cfg: Box) -> None:
     # Initialize model
     model = Model(cfg).to(device=device)
     model.setup()
-    print(model)
-    # train_dataloader, val_dataloader = load_datasets(cfg, model.model.image_encoder.img_size)
+    train_dataloader, val_dataloader = load_datasets(cfg, model.model.image_encoder.img_size)
 
-    # optimizer, scheduler = configure_opt(cfg, model)
+    optimizer, scheduler = configure_opt(cfg, model)
 
-    # train_sam(cfg, model, optimizer, scheduler, train_dataloader, val_dataloader)
-    # validate(model, val_dataloader, epoch=0)
+    train_sam(cfg, model, optimizer, scheduler, train_dataloader, val_dataloader)
+    validate(model, val_dataloader, epoch=0)
 
 
 if __name__ == "__main__":
