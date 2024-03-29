@@ -1,5 +1,6 @@
 import os
-
+import sys
+sys.path.append("/kaggle/working/segment-anything-training/segment-anything-training")
 import cv2
 import numpy as np
 import torch
@@ -8,7 +9,6 @@ from pycocotools.coco import COCO
 from segment_anything.utils.transforms import ResizeLongestSide
 from torch.utils.data import DataLoader
 from torch.utils.data import Dataset
-
 
 class COCODataset(Dataset):
 
