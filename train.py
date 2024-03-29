@@ -121,7 +121,6 @@ def train_sam(
             loss_total.backward()
             optimizer.step()
             scheduler.step()
-            del images, bboxes, gt_masks, pred_masks, iou_predictions
             batch_time.update(time.time() - end)
             end = time.time()
 
