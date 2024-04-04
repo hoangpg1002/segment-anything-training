@@ -93,15 +93,15 @@ def train_sam(
             # Move tensors to device
             images = images.to(device)
             bboxes = [bbox.to(device) for bbox in bboxes]
-            gt_masks = [mask.to(device) for mask in gt_masks]
+            # gt_masks = [mask.to(device) for mask in gt_masks]
 
             batch_size = images.size(0)
 
             optimizer.zero_grad()
 
             pred_masks, iou_predictions = model(images, bboxes)
-            pred_masks = [mask.to(device) for mask in pred_masks]
-            iou_predictions = [iou_pred.to(device) for iou_pred in iou_predictions]
+            # pred_masks = [mask.to(device) for mask in pred_masks]
+            # iou_predictions = [iou_pred.to(device) for iou_pred in iou_predictions]
 
             num_masks = sum(len(pred_mask) for pred_mask in pred_masks)
 
