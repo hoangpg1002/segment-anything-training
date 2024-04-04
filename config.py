@@ -2,7 +2,7 @@ from box import Box
 
 config = {
     "num_devices": 1,
-    "batch_size": 2,
+    "batch_size": 1,
     "num_workers": 4,
     "num_epochs": 20,
     "eval_interval": 2,
@@ -23,17 +23,17 @@ config = {
             "mask_decoder": False,
         },
     },
-    "dataset": {
-        "train": {
-            "root_dir": "/kaggle/input/coco-2017-dataset/coco2017/train2017",
-            "annotation_file": "/kaggle/working/instances_train2017_minicoco.json"
-        },
-        "val": {
-            "root_dir": "/kaggle/input/coco-2017-dataset/coco2017/val2017",
-            "annotation_file": "/kaggle/input/coco-2017-dataset/coco2017/annotations/instances_val2017.json"
-        }
-    },
-    # "samdataset":"/kaggle/input/sa1b01/sa1b"
+    # "dataset": {
+    #     "train": {
+    #         "root_dir": "/kaggle/input/coco-2017-dataset/coco2017/train2017",
+    #         "annotation_file": "/kaggle/working/instances_train2017_minicoco.json"
+    #     },
+    #     "val": {
+    #         "root_dir": "/kaggle/input/coco-2017-dataset/coco2017/val2017",
+    #         "annotation_file": "/kaggle/input/coco-2017-dataset/coco2017/annotations/instances_val2017.json"
+    #     }
+    # },
+    "samdataset":"/kaggle/input/sa1b01/sa1b"
 }
 
 cfg = Box(config)

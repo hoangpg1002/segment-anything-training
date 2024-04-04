@@ -6,7 +6,7 @@ import torch
 import torch.nn.functional as F
 from box import Box
 from config import cfg
-from dataset import load_datasets
+from load_sam import load_datasets
 from losses import DiceLoss
 from losses import FocalLoss
 from losses import *
