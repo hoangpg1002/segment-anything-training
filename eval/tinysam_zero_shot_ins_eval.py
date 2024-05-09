@@ -26,7 +26,7 @@ def eval_zero_shot(eval_type,val_img_path,val_json_path,vit_det_file_path,sam_ch
         
     with open(vit_det_file_path) as f:
          res = json.load(f)
-    model_type = "vit_t"
+    model_type = "vit_b"
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     sam = sam_model_registry[model_type](checkpoint=sam_checkpoint_path)
